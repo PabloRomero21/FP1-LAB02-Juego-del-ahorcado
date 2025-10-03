@@ -17,24 +17,25 @@ def elige_palabra(fichero="palabras.txt"):
     return random.choice(palabras)
 
 
-def normalizar(cadena):
-    cadena = cadena.lower().strip()
+def normalizar(palabra_secreta):
+    palabra_secreta = str(palabra_secreta).lower().strip()
     res = ""
-    for i in cadena:
-        if i == ("á" or "ä"):
+    for i in palabra_secreta:
+        if i in "áä":
             res += "a"
-        elif i == ("é" or "ë"):
+        elif i in "éë":
             res += "e"
-        elif i == ("í" or "ï"):
+        elif i in "íï":
             res += "i"
-        elif i == ("ó" or "ö"):
+        elif i in "óö":
             res += "o"
-        elif i == ("ú" or "ü"):
+        elif i in "úü":
             res += "u"
         else:
             res += i
-    cadena = res
-    return cadena
+    palabra_secreta= res
+    return palabra_secreta
+
 
 def ocultar(palabra_secreta, letras_usadas=""):
     '''Devuelve una cadena de texto con la palabra enmascarada. 
@@ -76,14 +77,14 @@ def pedir_letra(letras_usadas):
     letra= str(input("Introduce una letra:"))
     while True:
         if letra not in "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM":
-            str(input("Debes introducir una letra:"))
+                letra=str(input("Debes introducir una letra:"))
         elif len(letra) != 1:
-            str(input("Debes introducir una única letra"))
+                letra=str(input("Debes introducir una única letra:"))
         elif letra in letras_usadas :
-            str(input("Esa letra ya la has usado anteriormente"))
+                letra=str(input("Esa letra ya la has usado anteriormente:"))
         else:
             break
-    
+
     return letra.lower()
 
 
@@ -91,7 +92,7 @@ def jugar(palabra_secreta):
 
     intentos_restantes = 6
     letras_usadas= ""
-    normalizar(palabra_secreta)
+    palabra_secreta= normalizar(str(palabra_secreta))
     if len(palabra_secreta)<0:
         return None
     palabra_enmascarada= ocultar(palabra_secreta)
@@ -101,18 +102,17 @@ def jugar(palabra_secreta):
         letras_usadas += str(letra_nueva)
         if letra_nueva not in palabra_secreta:
             intentos_restantes -= 1
-            print(f"La letra recibida no pertenece a la palabra secreta, tines{intentos_restantes}intentos")
+            print()
+            print(f"La letra no pertenece a la palabra secreta, tines {intentos_restantes} intentos")
+            print()
 
         else:
             
             print("Has acertado")
             palabra_enmascarada= ocultar(palabra_secreta,letras_usadas)
-    if intentos_restantes> 0:
+    if intentos_restantes == 0:
         print(f"Has perdido, la palabra original era:{palabra_secreta}")
     if ha_ganado(palabra_enmascarada) == True:
        print("Enhorabuena, has ganado")
-
-
-
 
 jugar(elige_palabra())
